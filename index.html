@@ -1,31 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="script.js"></script>
+    <!--<script src="dialogueGraphScript.js"></script>-->
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <title>Group 32 - Game of Thrones</title>
 </head>
 
-<body onload="init()">
-    <div>
-        <div style="width: 640px; height: 100px; background-color: rgb(225, 205, 124); position: absolute; font-size: 80px;">Game of Thrones</div>
-        <div style="width: 640px; height: 80px; top: 108px; background-color: aqua; position: absolute;">
-            <button>John Snow</button>
-            <button>Jamie Lannister</button>
-            <button>Arya Stark</button>
+<body>
+    <div class="flexbox-container flexbox-screen-container">
+        <div class="flexbox-container flexbox-semi-container">
+            <div class="flexbox-container flexbox-upper-container">
+                <div class="flexbox-item title">Game of Thrones</div>
+                <div class="flexbox-item">
+                    <div class="slider">
+                        <input type="range" min="1" max="73" value="1" oninput="rangeValue.innerText = this.value">
+                        <p id="rangeValue">1</p>
+                    </div>
+                </div>
+                <div class="flexbox-item">
+                    <div class="searchbar">
+                        <input type="text" placeholder="Search.." name="search">
+                    </div>
+                </div>
+            </div>
+            <div class="flexbox-upper-container"></div>
         </div>
-        <div style="width: 640px; height: 80px; top: 188px; background-color: rgb(153, 244, 153); position: absolute;">Slider</div>
-        <div style="width: 792px; height: 260px; left: 648px; background-color: #f9e509; position: absolute;">Death</div>
-        <div style="width: 792px; height: 240px; top: 268px; left: 648px; background-color: #f9e509; position: absolute;"></div>
-        <div style="width: 640px; height: 80px; top: 268px; background-color: #8be7c5; position: absolute;">Dialogues</div>
-        <div style="width: 1432px; height: 200px; top: 348px; background-color: #8be7c5; position: absolute;"></div>
-        <div style="width: 1432px; height: 110px; top: 548px; background-color: #e6a1e7; position: absolute;">Apperence in episodes</div>
+        <div class="flexbox-container flexbox-semi-container">
+            <div class="flexbox-container flexbox-bottom-container">
+                <div class="flexbox-item" id="dialogueGraph"></div>
+                <div class="flexbox-item"></div>
+            </div>
+        </div>
     </div>
+
+    <script>
+
+        // set the dimensions and margins of the graph
+        const margin = { top: 10, right: 30, bottom: 30, left: 50 },
+            width = 460 - margin.left - margin.right,
+            height = 100 - margin.top - margin.bottom;
+
+        // append the svg object to the body of the page
+        const svg = d3.select("#dialogueGraph")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+
+        //Read the data
+        d3.csv("dialogue_data_processed.csv",
+
+            // When reading the csv, I must format variables:
+            d => {
+                for (let i=0; i < d.length; i++){
+                    
+                }
+                return {
+                    date: d3.timeParse("%Y-%m-%d")(d.date),
+                    value: d.value
+                }
+            }).then(
+
+                // Now I can use this dataset:
+                function (data) {
+
+                    // Add X axis --> it is a date format
+                    const x = d3.scaleTime()
+                        .domain(d3.extent(data, d => d.date))
+                        .range([0, width]);
+                    svg.append("g")
+                        .attr("transform", `translate(0,${height})`)
+                        .call(d3.axisBottom(x));
+
+                    // Add Y axis
+                    const y = d3.scaleLinear()
+                        .domain([0, d3.max(data, d => +d.value)])
+                        .range([height, 0]);
+                    svg.append("g")
+                        .call(d3.axisLeft(y));
+
+                    // Add the area
+                    svg.append("path")
+                        .datum(data)
+                        .attr("fill", "#cce5df")
+                        .attr("stroke", "#69b3a2")
+                        .attr("stroke-width", 1.5)
+                        .attr("d", d3.area()
+                            .x(d => x(d.date))
+                            .y0(y(0))
+                            .y1(d => y(d.value))
+                        )
+                })
+
+    </script>
 </body>
 
 </html>

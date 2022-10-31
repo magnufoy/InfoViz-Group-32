@@ -100,3 +100,12 @@ body{
     margin-right: 16px;
     font-size: 17px;
   }
+
+#dialogueGraph{
+    background-color: gray;
+}
+
+.selected-episode-line{
+    stroke: white;
+    stroke-width: 2px;
+}

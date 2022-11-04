@@ -11,18 +11,20 @@ const x = d3.scaleLinear()
                 .range([ 0, width ]);
 
 function init(){
-    if (name1){createDialogueGraph(name1, color1)}
-    if (name2){createDialogueGraph(name2, color2)}
+    populateCharacters()
+    if (name1){createDialogueGraph(name1, color1, 1)};
+    if (name2){createDialogueGraph(name2, color2, 2)};
     if (!name1 && !name2){
-        height = height*3
-        createDialogueGraph("sum","gray")
-    }
+        height = height*3;
+        createDialogueGraph("sum","gray");
+    };
 }
 
-function createDialogueGraph(name, color){
+function createDialogueGraph(name, color, nr = 1){
     // append the svg object to the body of the page
     const svg = d3.select("#dialogueGraph")
         .append("svg")
+        .attr("id",`graph-${nr}`)
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .attr("display", "flex")
@@ -101,6 +103,48 @@ function handleMouseMove(item){
 
 function searchCharacter(){
     let input = document.getElementById("searchbar").value;
-    input=input.toLowerCase();
-    console.log(input);
+    input = input.toLowerCase();
+    let x = document.getElementsByClassName("card");
+    for (i = 0; i < x.length; i++) { 
+        if (!x[i].innerHTML.toLowerCase().includes(input)) {
+            x[i].style.display="none";
+        }
+        else {
+            x[i].style.display="";                 
+        }
+    }  
+}
+
+function populateCharacters(){
+    let characters = [];
+    d3.csv("data/characters.csv", function(data) {
+        characters.push(data.name)
+        d3.select(".user-cards")
+        .selectAll("div")
+        .data(characters)
+        .enter()
+        .append("div")
+        .attr("class", "card")
+        .attr("id", d => d)
+        .text(d => captitalizeFirstLetters(d.replaceAll("_", " ")))
+        .on("click", function(){
+            let color = Math.floor(Math.random()*16777215).toString(16);
+            updateDialogueGraph(this.id, color);
+        });
+    });
+}
+
+function captitalizeFirstLetters(str){
+    const arr = str.split(" ");
+    for (var i = 0; i < arr.length; i++) {
+        arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].slice(1);
+    }
+    const str2 = arr.join(" ");
+    return str2
+}
+
+function updateDialogueGraph(name, color){
+    d3.select("#graph-2").remove();
+    d3.select("#graph-1").attr("id", "graph-2");
+    createDialogueGraph(name, `#${color}`, 1);
 }

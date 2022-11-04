@@ -83,7 +83,7 @@ body{
     display:flex;
     align-items: center;
     justify-content: space-around;
-    margin: 10px;
+    margin: 5px;
 }
 
 .slider input[type="range"]::-webkit-slider-thumb:hover {
@@ -108,4 +108,28 @@ body{
 .selected-episode-line{
     stroke: white;
     stroke-width: 2px;
+}
+
+.user-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: .25rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-top: 2px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+  
+.card {
+    border: 1px solid black;
+    background-color: white;
+    padding: .2rem;
+    font-size: 12px;
+}
+
+.scroll {
+    height: 60px;
+    overflow-x: hidden;
+    overflow-y: auto;
 }

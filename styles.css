@@ -41,6 +41,7 @@ body{
     border: 1px solid black;
     flex-grow: 1;
     flex-basis: 0;
+    background-color: gray;
 }
 
 .title{
@@ -101,10 +102,6 @@ body{
     font-size: 17px;
   }
 
-#dialogueGraph{
-    background-color: gray;
-}
-
 .selected-episode-line{
     stroke: white;
     stroke-width: 2px;
@@ -123,7 +120,6 @@ body{
   
 .card {
     border: 1px solid black;
-    background-color: white;
     padding: .2rem;
     font-size: 12px;
 }

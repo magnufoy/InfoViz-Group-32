@@ -20,7 +20,7 @@
                 <div class="flexbox-item title">Game of Thrones</div>
                 <div class="flexbox-item">
                     <div class="slider">
-                        <input type="range" min="1" max="73" value="1" oninput="rangeValue.innerText = this.value">
+                        <input id="slider" type="range" min="1" max="73" value="1" oninput="handleMouseMoveAndSlider(this.value)">
                         <p id="rangeValue">1</p>
                     </div>
                 </div>
@@ -37,7 +37,7 @@
         </div>
         <div class="flexbox-container flexbox-semi-container">
             <div class="flexbox-container flexbox-bottom-container">
-                <div class="flexbox-item" id="dialogueGraph"></div>
+                    <div class="flexbox-item" id="dialogueGraph"></div>
                 <div class="flexbox-item"></div>
             </div>
         </div>

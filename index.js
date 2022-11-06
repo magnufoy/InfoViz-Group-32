@@ -25,7 +25,7 @@ function createDialogueGraph(name, color, nr = 1){
     const svg = d3.select("#dialogueGraph")
         .append("svg")
         .attr("id",`graph-${nr}`)
-        .attr("width", width + margin.left + margin.right)
+        .attr("width", width + margin.left+1)
         .attr("height", height + margin.top + margin.bottom)
         .attr("display", "flex")
         .append("g")
@@ -53,7 +53,7 @@ function createDialogueGraph(name, color, nr = 1){
                 .datum(data)
                 .attr("fill", color)
                 .attr("stroke", color)
-                .attr("fill-opacity", 0.2)
+                .attr("fill-opacity", 0.4)
                 .attr("stroke-width", 1.0)
                 .attr("d", d3.area()
                     .x(d => x(d.episode))
@@ -62,15 +62,13 @@ function createDialogueGraph(name, color, nr = 1){
                 );
 
             // Add X axis
-            svg
-                .append("g")
+            svg.append("g")
                 .attr("transform", `translate(0,${height})`)
                 .attr("color", "white")
                 .call(d3.axisBottom(x));
 
             // Add Y axis   
-            svg
-                .append("g")
+            svg.append("g")
                 .attr("color", "white")
                 .call(d3
                     .axisLeft(y)
@@ -85,20 +83,28 @@ function createDialogueGraph(name, color, nr = 1){
             
             svg.append("rect")
                 .attr("width", innerWidth)
-                .attr("height", innerHeight)
+                .attr("height", height + margin.top + margin.bottom)
                 .attr("fill", "none")
                 .attr("pointer-events", "all")
-                .on("mousemove", (event, d) => handleMouseMove(d));
-
-
+                .on("mousemove", (event, d) => handleMouseMoveAndSlider(Math.round(x.invert(event.x-52))));
+                
+                
         })
 }
 
-function handleMouseMove(item){
-    var line_x = Math.round(x.invert(event.x-52));
+function handleMouseMoveAndSlider(episode){
     d3.selectAll(".selected-episode-line")
-        .attr("x1", x(line_x))
-        .attr("x2", x(line_x))
+        .attr("x1", x(episode))
+        .attr("x2", x(episode));
+
+    d3.select("#rangeValue")
+        .text(episode);
+
+    
+}
+
+function calculateEpisodeFromMouseMove(){
+    var episode = Math.round(x.invert(event.x-52));
 }
 
 function searchCharacter(){
@@ -123,7 +129,7 @@ function populateCharacters(){
         .selectAll("div")
         .data(characters)
         .enter()
-        .append("div")
+        .append("button")
         .attr("class", "card")
         .attr("id", d => d)
         .text(d => captitalizeFirstLetters(d.replaceAll("_", " ")))

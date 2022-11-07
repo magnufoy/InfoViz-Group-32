@@ -124,20 +124,23 @@ function searchCharacter(){
 function populateCharacters(){
     let characters = [];
     d3.csv("data/characters.csv", function(data) {
-        characters.push(data.name)
+        return characters.push(data.name);
+    }).then(
+        function(data){
         d3.select(".user-cards")
-        .selectAll("div")
-        .data(characters)
-        .enter()
-        .append("button")
-        .attr("class", "card")
-        .attr("id", d => d)
-        .text(d => captitalizeFirstLetters(d.replaceAll("_", " ")))
-        .on("click", function(){
-            let color = Math.floor(Math.random()*16777215).toString(16);
-            updateDialogueGraph(this.id, color);
-        });
-    });
+            .selectAll("div")
+            .data(characters)
+            .enter()
+            .append("button")
+            .attr("class", "card")
+            .attr("id", d => d)
+            .text(d => captitalizeFirstLetters(d.replaceAll("_", " ")))
+            .on("click", function(){
+                let color = Math.floor(Math.random()*16777215).toString(16);
+                updateDialogueGraph(this.id, color)
+            });
+        }
+    )
 }
 
 function captitalizeFirstLetters(str){

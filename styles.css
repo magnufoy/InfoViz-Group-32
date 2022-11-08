@@ -130,3 +130,38 @@ body{
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+dd{
+    font-size: 12px;
+    max-width: 200px;
+    max-height: 300px;
+    padding: 3px;
+}
+
+dt{
+    max-width: 200px;
+    max-height: 300px;
+    padding: 5px; 
+}
+
+dl{
+    max-width: 200px;
+    max-height: 300px; 
+}
+
+#legend{
+    max-width: 200px;
+    max-height: 300px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    margin-left: 15px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+}
+
+
+#bubbleGraph{
+    display: flex;
+    flex-direction: row;
+}

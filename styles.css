@@ -21,26 +21,22 @@ body{
 .flexbox-semi-container{
     height: 100vw;
     flex-direction: row;
-    border: 1px solid black;
 }
 
 .flexbox-upper-container{
     width: 100vw;
     flex-direction: column;
-    border: 1px solid black;
     
 }
 
 .flexbox-bottom-container{
     width: 100vw;
     flex-direction: row;
-    border: 1px solid black;
 }
 
 .flexbox-item{
     min-height: 40px;
     flex-direction: column;
-    border: 1px solid black;
     flex-grow: 1;
     flex-basis: 0;
   
@@ -146,8 +142,13 @@ dd{
     padding: 5px; 
 }
 #bubbleTitle{
-    padding: 5px; 
+    margin-top: 4px; 
     max-width: 200px;
+}
+
+#bTitle{
+    margin-top: 15px; 
+    max-width: 300px;
 }
 
 dl{

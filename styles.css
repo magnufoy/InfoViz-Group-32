@@ -63,6 +63,7 @@ body{
     font-weight: 600;
     font-family: Open Sans;
     color: black;
+    padding: 20px;
 }
 
 .slider input[type="range"] {
@@ -138,10 +139,14 @@ dd{
     padding: 3px;
 }
 
-dt{
+#bubbleTitle{
     max-width: 200px;
     max-height: 300px;
     padding: 5px; 
+}
+#bubbleTitle{
+    padding: 5px; 
+    max-width: 200px;
 }
 
 dl{
@@ -164,4 +169,8 @@ dl{
 #bubbleGraph{
     display: flex;
     flex-direction: row;
+}
+
+#dialogueGraph{
+    padding: 10px;
 }

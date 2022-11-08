@@ -17,16 +17,17 @@
     <div class="flexbox-container flexbox-screen-container">
         <div class="flexbox-container flexbox-semi-container">
             <div class="flexbox-container flexbox-upper-container">
-                <div class="flexbox-item title">Game of Thrones</div>
+                <div class="flexbox-item title"><img id ="log" class="img-fluid" alt="Responsive image" src = "logo_.png"></div>
+
                 <div class="flexbox-item">
                     <div class="slider">
                         <input id="slider" type="range" min="1" max="73" value="1" oninput="handleMouseMoveAndSlider(this.value)" onclick="update(this.value)">
-                        <p id="rangeValue">1</p>
+                        <p lass = "font-weight-light text-white" id="rangeValue">1</p>
                     </div>
                 </div>
                 <div class="flexbox-item">
                     <div class="searchbar">
-                        <input type="text" placeholder="Search.." name="search" id="searchbar" onkeyup="searchCharacter()">
+                        <input type="text" class = "form-control form-control-sm rounded bg-dark text-white" style="width: 25%; height: 5%" placeholder="Search.." name="search" id="searchbar" onkeyup="searchCharacter()">
                     </div>
                     <div class="scroll">
                         <div class="user-cards"></div>

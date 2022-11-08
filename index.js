@@ -42,59 +42,65 @@ function createDialogueGraph(name, color, nr = 1){
         
         // Now I can use this dataset:
         function(data) {
-                
-            // Add Y axis
-            const y = d3.scaleLinear()
-                .domain([0, d3.max([60, data.map(d=>d.dialogue_count).reduce((a, b) => Math.max(a, b), -Infinity)])])
-                .range([ heightDialogue, 0 ]);
-            
+            let color = "";
             const fillColor = d3.scaleOrdinal()
-                .domain(["Arryn", "Baelish", "Baratheon", "Bolton", "Brotherhood Without Banners", "Clegane", "Dothraki", "Faceless Men", "Free Folk", "Frey", "Good Masters", "Greyjoy", "Kingsguard", "Lannister", "Martell", "Night's Watch", "R'hllor", "Stark", "Targaryen", "Tarly", "The Thirteen", "The Undying Ones", "Tyrell", "Varys"])
-                .range(["#1E91E7", "#92DC92", "#F4D71B", "#FFAEAE", "#8aa263", "#00EAB8", "#A25D0A", "#FF1DBE", "#FFFFFF", "#B9B9B9", "#0A208E", "#474747", "#600C0C", "#C61616", "#EF8F2F", "#000000", "#FFD597", "#F4F4F4", "#A000C6", "#185818", "#2B9A2B", "#D3A7FF"]);
-              
-            // Add the area
-            svg.append("path")
-                .datum(data)
-                .attr("fill", color)
-                .attr("stroke", color)
-                .attr("fill-opacity", 0.4)
-                .attr("stroke-width", 1.0)
-                .attr("d", d3.area()
-                    .x(d => xDialogue(d.episode))
-                    .y0(y(0))
-                    .y1(d => y(d.dialogue_count))
-                );
+                        .domain(["Arryn", "Baelish", "Baratheon", "Bolton", "Brotherhood Without Banners", "Clegane", "Dothraki", "Faceless Men", "Free Folk", "Frey", "Good Masters", "Greyjoy", "Kingsguard", "Lannister", "Martell", "Night's Watch", "R'hllor", "Stark", "Targaryen", "Tarly", "The Thirteen", "The Undying Ones", "Tyrell", "Varys"])
+                        .range(["#1E91E7", "#92DC92", "#F4D71B", "#FFAEAE", "#8aa263", "#00EAB8", "#A25D0A", "#FF1DBE", "#FFFFFF", "#B9B9B9", "#0A208E", "#474747", "#600C0C", "#C61616", "#EF8F2F", "#000000", "#FFD597", "#F4F4F4", "#A000C6", "#185818", "#2B9A2B", "#D3A7FF"]);
+            d3.csv(`data/houses/${name}_house.csv`,function(data){
+                console.log(data.house)
+                return color = fillColor(data.house)
+            }).then(
+                function(data3){
+                    
+                    // Add Y axis
+                    const y = d3.scaleLinear()
+                        .domain([0, d3.max([60, data.map(d=>d.dialogue_count).reduce((a, b) => Math.max(a, b), -Infinity)])])
+                        .range([ heightDialogue, 0 ]);
+                    
+                    // Add the area
+                    svg.append("path")
+                        .datum(data)
+                        .attr("fill", color)
+                        .attr("stroke", color)
+                        .attr("fill-opacity", 0.4)
+                        .attr("stroke-width", 1.0)
+                        .attr("d", d3.area()
+                            .x(d => xDialogue(d.episode))
+                            .y0(y(0))
+                            .y1(d => y(d.dialogue_count))
+                        );
 
-            // Add X axis
-            svg.append("g")
-                .attr("transform", `translate(0,${heightDialogue})`)
-                .attr("color", "white")
-                .call(d3.axisBottom(xDialogue));
+                    // Add X axis
+                    svg.append("g")
+                        .attr("transform", `translate(0,${heightDialogue})`)
+                        .attr("color", "white")
+                        .call(d3.axisBottom(xDialogue));
 
-            // Add Y axis   
-            svg.append("g")
-                .attr("color", "white")
-                .call(d3
-                    .axisLeft(y)
-                    .ticks(6,"f"));
-            
-            svg.append("line")
-                .attr("class", "selected-episode-line")
-                .attr("x1", xDialogue(selectedEpisode))
-                .attr("x2", xDialogue(selectedEpisode))
-                .attr("y1", y(0))
-                .attr("y2", d => y(innerHeight));
-            
-            svg.append("rect")
-                .attr("width", innerWidth)
-                .attr("height", heightDialogue + marginDialogue.top + marginDialogue.bottom)
-                .attr("fill", "none")
-                .attr("pointer-events", "all")
-                .on("click", (event, d) => 
-                handleMouseMove(Math.round(xDialogue.invert(event.x-52)))
-                );                
-                
-        })
+                    // Add Y axis   
+                    svg.append("g")
+                        .attr("color", "white")
+                        .call(d3
+                            .axisLeft(y)
+                            .ticks(6,"f"));
+                    
+                    svg.append("line")
+                        .attr("class", "selected-episode-line")
+                        .attr("x1", xDialogue(selectedEpisode))
+                        .attr("x2", xDialogue(selectedEpisode))
+                        .attr("y1", y(0))
+                        .attr("y2", d => y(innerHeight));
+                    
+                    svg.append("rect")
+                        .attr("width", innerWidth)
+                        .attr("height", heightDialogue + marginDialogue.top + marginDialogue.bottom)
+                        .attr("fill", "none")
+                        .attr("pointer-events", "all")
+                        .on("click", (event, d) => 
+                        handleMouseMove(Math.round(xDialogue.invert(event.x-52)))); 
+                }
+            )      
+        }
+    )
 }
 
 function handleMouseMoveAndSlider(episode){
@@ -212,7 +218,6 @@ function createNodes(rawData) {
     // note we have to ensure that size is a number
     let data = rawData //.filter(function(d, i) { return d.episode_1 == 1;})
     const maxSize = d3.max(data, d => +d.killings_count);
-    console.log(data)
     // size bubbles based on area
     const radiusScale = d3.scaleSqrt()
       .domain([0, maxSize])
@@ -391,25 +396,7 @@ function createBubbleChart(episode_nr){
     else {
         d3.csv(`bubble_data/episodes_appearances/episode_${episode_nr}.csv`).then(displayData1);
     }
-    
-    
-        // files[0] will contain file1.csv
-        // files[1] will contain file2.csv
-    
-        d3.csv("bubble_data/episodes.csv").then(function (data) {
-      
-            var margin = {left: 30, right: 30},
-                width = 1000,
-                height = 100,
-                range = [1, 73],
-                step = 1; // change the step and if null, it'll switch back to a normal slider
-    
-    
-            // array useful for step sliders
-            var rangeValues = d3.range(range[0], range[1], step || 1).concat(range[1]);
-            var xAxis = d3.axisBottom(xScale).tickValues(rangeValues).tickFormat(function (d) {
-                return d;
-          });      
-        });
+
+        
 }
 

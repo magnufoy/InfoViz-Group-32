@@ -332,6 +332,8 @@ function bubbleChart() {
                     else{
                         updateDialogueGraph(id_b_2, color);
                     }
+
+                    filterKilled(this.id);
                 };
             };
             console.log("this.id: " + this.id);
@@ -339,7 +341,17 @@ function bubbleChart() {
             console.log("id_b_2: " + id_b_2);
             console.log("chosen_nr: " + chosen_nr);
         })
-  
+    function filterKilled(id){
+        d3.csv("bubble_data/characters_v2.csv", function(data) {
+            filteredData = data.filter(function(row) {
+                return row['killings_count'].toLowerCase().replaceAll(" ", "_") == id;
+            });
+            for (filteredDataRow in filteredData){
+                d3.selectAll("circle")
+                    .filter(d => filteredDataRow['killings_count'].includes(d.id)
+            }
+        });
+    }
   
       //labels
       titles = elements
@@ -412,8 +424,6 @@ function createBubbleChart(episode_nr){
     }
     else {
         d3.csv(`bubble_data/episodes_appearances/episode_${episode_nr}.csv`).then(displayData1);
-    }
-
-        
+    }       
 }
 

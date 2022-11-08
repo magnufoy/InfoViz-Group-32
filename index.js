@@ -1,8 +1,8 @@
 
 // set the dimensions and margins of the graph
 var marginDialogue = {top: 10, right: 30, bottom: 20, left: 50},
-widthDialogue = 660 - marginDialogue.left - marginDialogue.right,
-heightDialogue = 150 - marginDialogue.top - marginDialogue.bottom;
+widthDialogue = 620 - marginDialogue.left - marginDialogue.right,
+heightDialogue = 130 - marginDialogue.top - marginDialogue.bottom;
 var name1="jon_snow", name2="varys";
 var color1 = "green", color2="red";
 let selectedEpisode = 1;
@@ -15,7 +15,7 @@ function init(){
     if (name1){createDialogueGraph(name1, color1, 1)};
     if (name2){createDialogueGraph(name2, color2, 2)};
     if (!name1 && !name2){
-        heightDialogue = heightheightDialogue*3;
+        heightDialogue = heightDialogue*3;
         createDialogueGraph("sum","gray");
     };
     createBubbleChart(-1);
@@ -47,7 +47,6 @@ function createDialogueGraph(name, color, nr = 1){
                         .domain(["Arryn", "Baelish", "Baratheon", "Bolton", "Brotherhood Without Banners", "Clegane", "Dothraki", "Faceless Men", "Free Folk", "Frey", "Good Masters", "Greyjoy", "Kingsguard", "Lannister", "Martell", "Night's Watch", "R'hllor", "Stark", "Targaryen", "Tarly", "The Thirteen", "The Undying Ones", "Tyrell", "Varys"])
                         .range(["#1E91E7", "#92DC92", "#F4D71B", "#FFAEAE", "#8aa263", "#00EAB8", "#A25D0A", "#FF1DBE", "#FFFFFF", "#B9B9B9", "#0A208E", "#474747", "#600C0C", "#C61616", "#EF8F2F", "#000000", "#FFD597", "#F4F4F4", "#A000C6", "#185818", "#2B9A2B", "#D3A7FF"]);
             d3.csv(`data/houses/${name}_house.csv`,function(data){
-                console.log(data.house)
                 return color = fillColor(data.house)
             }).then(
                 function(data3){
@@ -204,7 +203,7 @@ function updateDialogueGraph(name, color){
 //
 
 const width = 500;
-const height = 300;
+const height = 330;
 const centre = { x: width/2, y: height/2 }; // location to centre the bubbles
 const forceStrength = 0.03; // strength to apply to the position forces
 let svg = null;
@@ -221,7 +220,7 @@ function createNodes(rawData) {
     // size bubbles based on area
     const radiusScale = d3.scaleSqrt()
       .domain([0, maxSize])
-      .range([10, 70 ]);
+      .range([10, 60 ]);
 
     // use map() to convert raw data into node data
     const myNodes = data.map(d => ({
@@ -292,7 +291,8 @@ function bubbleChart() {
         
   
     let chosen_nr = 0;
-      
+    let id_b_1 = "";
+    let id_b_2 = "";
     bubbles = elements
         .append('circle')
         .classed('bubble', true)
@@ -305,23 +305,40 @@ function bubbleChart() {
             d3.select(this).attr("cursor", "pointer");
         })
         .on("click", function() {
-            if (chosen_nr < 2){
-                chosen_nr += 1;
+            if (id_b_1 == this.id){
                 d3.select(this)
-                    .attr('stroke-width', d=> '3')
-                    .attr('stroke', '#000000')
-                let color = Math.floor(Math.random()*16777215).toString(16);
-                updateDialogueGraph(this.id, color);
+                    .attr('stroke-width', d => '0.5');
+                chosen_nr -= 1;
+                id_b_1 = "";
             }
+            else if (id_b_2 == this.id){
+                d3.select(this)
+                    .attr('stroke-width', d => '0.5')
+                chosen_nr -= 1;
+                id_b_2 = "";
+            }
+            else {
+                if (chosen_nr < 2){
+                    chosen_nr += 1;
+                    id_b_2 = id_b_1;
+                    id_b_1 = this.id;
+                    d3.select(this)
+                        .attr('stroke-width', d=> '3')
+                        .attr('stroke', '#000000')
+                    let color = Math.floor(Math.random()*16777215).toString(16);
+                    if(id_b_1){
+                        updateDialogueGraph(id_b_1, color);
+                    }
+                    else{
+                        updateDialogueGraph(id_b_2, color);
+                    }
+                };
+            };
+            console.log("this.id: " + this.id);
+            console.log("id_b_1: " + id_b_1);
+            console.log("id_b_2: " + id_b_2);
+            console.log("chosen_nr: " + chosen_nr);
         })
-        .on("dblclick", function() {
-            if (chosen_nr > 0){
-            chosen_nr -= 1;
-            }
-            d3.select(this)
-                .attr('stroke-width', d=> '0.5')
-                .attr('stroke', '#000000')
-        });
   
   
       //labels

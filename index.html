@@ -20,7 +20,7 @@
                 <div class="flexbox-item title">Game of Thrones</div>
                 <div class="flexbox-item">
                     <div class="slider">
-                        <input id="slider" type="range" min="1" max="73" value="1" oninput="handleMouseMoveAndSlider(this.value)">
+                        <input id="slider" type="range" min="1" max="73" value="1" oninput="handleMouseMoveAndSlider(this.value)" onclick="update(this.value)">
                         <p id="rangeValue">1</p>
                     </div>
                 </div>
@@ -33,11 +33,33 @@
                     </div> 
                 </div>
             </div>
-            <div class="flexbox-upper-container"></div>
+            <div class="flexbox-upper-container" id="bubbleGraph">
+                <div id="legend">
+                    <dt>Reasons of death</dt>
+                    <dl>
+                        <dd>🛡️ Killed in battle</dd>
+                        <dd>🐗 Accidently killed by a boar</dd>
+                        <dd>⚔️ Killed in combat</dd>
+                        <dd>🐶 Killed by a dog</dd>
+                        <dd>😞 Killed by someone ending their pain</dd>
+                        <dd>⚖️ Executed</dd>
+                        <dd>🔥 Killed by fire</dd>
+                        <dd>🔮 Killed by magic</dd>
+                        <dd>🗡️ Murdered</dd>
+                        <dd>💊 Poisoned</dd>
+                        <dd>🤝 Sacrificed themselves</dd>
+                        <dd>🐻 Killed by a bear</dd> 
+                        <dd>👋 Suicide</dd>
+                        <dd>😱 Killed by treason</dd>
+                        <dd>🐺 Killed by a wolf</dd>
+                    </dl>
+                </div>
+                <div id="bubble"></div>
+            </div>
         </div>
         <div class="flexbox-container flexbox-semi-container">
             <div class="flexbox-container flexbox-bottom-container">
-                    <div class="flexbox-item" id="dialogueGraph"></div>
+                <div class="flexbox-item" id="dialogueGraph"></div>
                 <div class="flexbox-item"></div>
             </div>
         </div>

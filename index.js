@@ -101,8 +101,8 @@ function handleMouseMoveAndSlider(episode){
     d3.select("#rangeValue")
         .text(episode);
 
-    d3.select("#bubble").remove();
     createBubbleChart(episode);
+
     
 }
 
@@ -269,6 +269,7 @@ function bubbleChart() {
       
       svg = d3.select(selector)
         .append('svg')
+        .attr("class", "bubbleSvg")
         .attr('width', width)
         .attr('height', height);
       
@@ -277,7 +278,7 @@ function bubbleChart() {
       const elements = svg.selectAll('.bubble')
         .data(nodes, d => d.name)
         .enter()
-        .append('g')
+        .append('g');
         
   
   
@@ -345,10 +346,7 @@ function ticked() {
   }
 
 function createBubbleChart(episode_nr){
-    
-    d3.select("#bubbleGraph")
-        .append("div")
-        .attr("id", "bubble");
+    d3.selectAll(".bubbleSvg").remove();
 
     // new bubble chart instance
     let myBubbleChart = bubbleChart();
@@ -378,20 +376,6 @@ function createBubbleChart(episode_nr){
                 range = [1, 73],
                 step = 1; // change the step and if null, it'll switch back to a normal slider
     
-            // append svg
-            var svg = d3.select('div#cursor').append('svg')
-                .attr('width', width)
-                .attr('height', height);
-    
-            var slider = svg.append('g')
-                .classed('slider', true)
-                .attr('transform', 'translate(' + margin.left +', '+ (height/2) + ')');
-    
-            // using clamp here to avoid slider exceeding the range limits
-            var xScale = d3.scaleLinear()
-                .domain(range)
-                .range([0, width - margin.left - margin.right])
-                .clamp(true);
     
             // array useful for step sliders
             var rangeValues = d3.range(range[0], range[1], step || 1).concat(range[1]);

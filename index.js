@@ -87,8 +87,9 @@ function createDialogueGraph(name, color, nr = 1){
                 .attr("height", heightDialogue + marginDialogue.top + marginDialogue.bottom)
                 .attr("fill", "none")
                 .attr("pointer-events", "all")
-                .on("mousemove", (event, d) => handleMouseMoveAndSlider(Math.round(xDialogue.invert(event.x-52))));
-                
+                .on("click", (event, d) => 
+                handleMouseMove(Math.round(xDialogue.invert(event.x-52)))
+                );                
                 
         })
 }
@@ -100,10 +101,11 @@ function handleMouseMoveAndSlider(episode){
 
     d3.select("#rangeValue")
         .text(episode);
+}
 
-    createBubbleChart(episode);
-
-    
+function handleMouseMove(episode){
+    handleMouseMoveAndSlider(episode);
+    update(episode);
 }
 
 function calculateEpisodeFromMouseMove(){
@@ -345,8 +347,24 @@ function ticked() {
       .attr('y', d => d.y)
   }
 
-function createBubbleChart(episode_nr){
+function update(episode_nr) {
+ 
+    // filter data set and redraw plot
     d3.selectAll(".bubbleSvg").remove();
+    let myUpdatedBubbleChart = bubbleChart();
+
+    // function called once promise is resolved and data is loaded from csv
+    // calls bubble chart function to display inside #vis div
+    function displayUpdatedData(data) {
+      myUpdatedBubbleChart('#bubble', data, episode_nr);} // 1 hs the selectedEpisode
+
+    // load data
+    
+    d3.csv(`bubble_data/episodes_appearances/episode_${episode_nr}.csv`).then(displayUpdatedData);
+
+}
+
+function createBubbleChart(episode_nr){
 
     // new bubble chart instance
     let myBubbleChart = bubbleChart();
@@ -381,30 +399,7 @@ function createBubbleChart(episode_nr){
             var rangeValues = d3.range(range[0], range[1], step || 1).concat(range[1]);
             var xAxis = d3.axisBottom(xScale).tickValues(rangeValues).tickFormat(function (d) {
                 return d;
-          });
-
-    
-          function update(h) {
-            // update position and text of label according to slider scale
-            handle.attr("cx", x(h));
-            label
-              .attr("x", x(h))
-              .text(h);
-    
-            // filter data set and redraw plot
-    
-            let myUpdatedBubbleChart = bubbleChart();
-    
-            // function called once promise is resolved and data is loaded from csv
-            // calls bubble chart function to display inside #vis div
-            function displayUpdatedData(data) {
-              myUpdatedBubbleChart('#bubble', data, h);} // 1 hs the selectedEpisode
-    
-            // load data
-    
-            d3.csv("bubble_data/characters_v2.csv").then(displayUpdatedData);
-    
-          }      
+          });      
         });
 }
 

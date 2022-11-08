@@ -2,10 +2,10 @@
 // set the dimensions and margins of the graph
 var marginDialogue = {top: 10, right: 30, bottom: 20, left: 50},
 widthDialogue = 660 - marginDialogue.left - marginDialogue.right,
-heightDialogue = 70 - marginDialogue.top - marginDialogue.bottom;
+heightDialogue = 150 - marginDialogue.top - marginDialogue.bottom;
 var name1="jon_snow", name2="varys";
 var color1 = "green", color2="red";
-let selectedEpisode = 42;
+let selectedEpisode = 1;
 const xDialogue = d3.scaleLinear()
                 .domain([1,73])
                 .range([ 0, widthDialogue ]);
@@ -48,7 +48,10 @@ function createDialogueGraph(name, color, nr = 1){
                 .domain([0, d3.max([60, data.map(d=>d.dialogue_count).reduce((a, b) => Math.max(a, b), -Infinity)])])
                 .range([ heightDialogue, 0 ]);
             
-                
+            const fillColor = d3.scaleOrdinal()
+                .domain(["Arryn", "Baelish", "Baratheon", "Bolton", "Brotherhood Without Banners", "Clegane", "Dothraki", "Faceless Men", "Free Folk", "Frey", "Good Masters", "Greyjoy", "Kingsguard", "Lannister", "Martell", "Night's Watch", "R'hllor", "Stark", "Targaryen", "Tarly", "The Thirteen", "The Undying Ones", "Tyrell", "Varys"])
+                .range(["#1E91E7", "#92DC92", "#F4D71B", "#FFAEAE", "#8aa263", "#00EAB8", "#A25D0A", "#FF1DBE", "#FFFFFF", "#B9B9B9", "#0A208E", "#474747", "#600C0C", "#C61616", "#EF8F2F", "#000000", "#FFD597", "#F4F4F4", "#A000C6", "#185818", "#2B9A2B", "#D3A7FF"]);
+              
             // Add the area
             svg.append("path")
                 .datum(data)
@@ -73,7 +76,7 @@ function createDialogueGraph(name, color, nr = 1){
                 .attr("color", "white")
                 .call(d3
                     .axisLeft(y)
-                    .ticks(3,"f"));
+                    .ticks(6,"f"));
             
             svg.append("line")
                 .attr("class", "selected-episode-line")
@@ -220,8 +223,8 @@ function createNodes(rawData) {
       ...d,
       radius: radiusScale(+d.killings_count),
       size: +d.killings_count,
-      x: Math.random() * 900,
-      y: Math.random() * 800
+      x: Math.random() * 500,
+      y: Math.random() * 500
     }));
 
     return myNodes;
@@ -245,7 +248,7 @@ function bubbleChart() {
     simulation.stop();
   
     // set up colour scale
-    const fillColour = d3.scaleOrdinal()
+    const fillColor = d3.scaleOrdinal()
         .domain(["Arryn", "Baelish", "Baratheon", "Bolton", "Brotherhood Without Banners", "Clegane", "Dothraki", "Faceless Men", "Free Folk", "Frey", "Good Masters", "Greyjoy", "Kingsguard", "Lannister", "Martell", "Night's Watch", "R'hllor", "Stark", "Targaryen", "Tarly", "The Thirteen", "The Undying Ones", "Tyrell", "Varys"])
         .range(["#1E91E7", "#92DC92", "#F4D71B", "#FFAEAE", "#8aa263", "#00EAB8", "#A25D0A", "#FF1DBE", "#FFFFFF", "#B9B9B9", "#0A208E", "#474747", "#600C0C", "#C61616", "#EF8F2F", "#000000", "#FFD597", "#F4F4F4", "#A000C6", "#185818", "#2B9A2B", "#D3A7FF"]);
   
@@ -290,7 +293,7 @@ function bubbleChart() {
         .classed('bubble', true)
         .attr('id', d => `${d.name.replaceAll(" ", "_").toLowerCase()}`)
         .attr('r', d => d.radius)
-        .attr('fill', d => fillColour(d.house))
+        .attr('fill', d => fillColor(d.house))
         .attr('stroke', '#000000')
         .attr('stroke-width', d=> '0.5')
         .on("mouseover", function(){
@@ -301,7 +304,7 @@ function bubbleChart() {
                 chosen_nr += 1;
                 d3.select(this)
                     .attr('stroke-width', d=> '3')
-                    .attr('stroke', 'red')
+                    .attr('stroke', '#000000')
                 let color = Math.floor(Math.random()*16777215).toString(16);
                 updateDialogueGraph(this.id, color);
             }
@@ -383,7 +386,7 @@ function createBubbleChart(episode_nr){
     
     // load data
     if (episode_nr == -1){
-        d3.csv(`bubble_data/characters_v2.csv`).then(displayData1);
+        d3.csv(`bubble_data/reduced_characters_v2.csv`).then(displayData1);
     }
     else {
         d3.csv(`bubble_data/episodes_appearances/episode_${episode_nr}.csv`).then(displayData1);

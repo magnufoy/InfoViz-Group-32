@@ -32,7 +32,7 @@ body{
 
 .flexbox-bottom-container{
     width: 100vw;
-    flex-direction: column;
+    flex-direction: row;
     border: 1px solid black;
 }
 

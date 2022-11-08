@@ -165,3 +165,7 @@ dl{
     display: flex;
     flex-direction: row;
 }
+
+#speak{
+    width: 300px;
+}

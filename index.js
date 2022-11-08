@@ -15,7 +15,7 @@ function init(){
     if (name1){createDialogueGraph(name1, color1, 1)};
     if (name2){createDialogueGraph(name2, color2, 2)};
     if (!name1 && !name2){
-        heightDialogue = heightheightDialogue*3;
+        heightDialogue = heightDialogue*3;
         createDialogueGraph("sum","gray");
     };
     createBubbleChart(-1);

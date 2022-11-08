@@ -95,7 +95,7 @@ function createDialogueGraph(name, color, nr = 1){
                         .attr("fill", "none")
                         .attr("pointer-events", "all")
                         .on("click", (event, d) => 
-                        handleMouseMove(Math.round(xDialogue.invert(event.x-52)))); 
+                        handleMouseMove(Math.round(xDialogue.invert(event.x-52)-1.5))); 
                 }
             )      
         }
@@ -220,7 +220,7 @@ function createNodes(rawData) {
     // size bubbles based on area
     const radiusScale = d3.scaleSqrt()
       .domain([0, maxSize])
-      .range([10, 60 ]);
+      .range([9, 55 ]);
 
     // use map() to convert raw data into node data
     const myNodes = data.map(d => ({

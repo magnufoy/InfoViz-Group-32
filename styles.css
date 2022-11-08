@@ -1,5 +1,6 @@
 body{
-    background-image: url(/img/back.jpg);
+    background-image: url(back_.jpg);
+
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -27,7 +28,7 @@ body{
     width: 100vw;
     flex-direction: column;
     border: 1px solid black;
-    background-color: gray;
+    
 }
 
 .flexbox-bottom-container{
@@ -42,7 +43,7 @@ body{
     border: 1px solid black;
     flex-grow: 1;
     flex-basis: 0;
-    background-color: gray;
+  
 }
 
 .title{
@@ -153,6 +154,7 @@ dl{
     max-width: 200px;
     max-height: 300px; 
 }
+
 
 #legend{
     max-width: 200px;

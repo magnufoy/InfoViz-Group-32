@@ -283,30 +283,37 @@ function bubbleChart() {
         .append('g');
         
   
-  
+    let chosen_nr = 0;
       
-      bubbles = elements
+    bubbles = elements
         .append('circle')
         .classed('bubble', true)
+        .attr('id', d => `${d.name.replaceAll(" ", "_").toLowerCase()}`)
         .attr('r', d => d.radius)
         .attr('fill', d => fillColour(d.house))
         .attr('stroke', '#000000')
         .attr('stroke-width', d=> '0.5')
-        .on("mouseover", function() {
-          d3.select(this)
-            .attr('stroke-width', d=> '3')})
+        .on("mouseover", function(){
+            d3.select(this).attr("cursor", "pointer");
+        })
         .on("click", function() {
-          d3.selectAll('circle').filter(function(d) {console.log(d)})//return d.name == "Cersei Lannister";})
-            .attr('stroke-width', d=> '3')
-            .attr('stroke', 'red')
+            if (chosen_nr < 2){
+                chosen_nr += 1;
+                d3.select(this)
+                    .attr('stroke-width', d=> '3')
+                    .attr('stroke', 'red')
+                let color = Math.floor(Math.random()*16777215).toString(16);
+                updateDialogueGraph(this.id, color);
+            }
         })
-        .on("mouseout", function() {
-          d3.select(this)
-            .attr('r', d => d.radius)
-            .attr('fill', d => fillColour(d.house))
-            .attr('stroke', '#000000')
-            .attr('stroke-width', d=> '0.5')
-        })
+        .on("dblclick", function() {
+            if (chosen_nr > 0){
+            chosen_nr -= 1;
+            }
+            d3.select(this)
+                .attr('stroke-width', d=> '0.5')
+                .attr('stroke', '#000000')
+        });
   
   
       //labels
